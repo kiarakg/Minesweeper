@@ -35,7 +35,18 @@ class Board:
         # plant the bombs
         bombs_planted = 0
         while bombs_planted < self.num_bombs:
-            loc = random
+            loc = random.randint(0, self.dim_size ** 2 - 1)    # return a random integer N such that a <= N <= b
+            row = loc // self.dim_size  # we want the number of times dim_size goes into loc to tell us
+            col = loc % self.dim_size   # we want the remainder to tell us what index in that row to look for
+
+            if board[row][col] == '*':
+                # this means we've actually planted a bomb there already so keep going
+                continue
+
+            board[row][col] = '*'   # plant the bomb
+            bombs_planted += 1
+
+        return board
 
 
 # play the game
