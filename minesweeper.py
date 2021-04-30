@@ -62,12 +62,20 @@ class Board:
 
     def get_num_neighboring_bombs(self, row, col):
         # lets iterate through each of the neighboring positions and sum number of bombs
+        #   top left: (row - 1, col - 1)
+        #   top middle: (row - 1, col)
+        #   top right: (row - 1, col + 1)
+        #   left: (row, col - 1)
+        #   right: (row, col + 1)
+        #   bottom left: (row + 1, col - 1)
+        #   bottom middle: (row + 1, col)
+        #   bottom right: (row + 1, col + 1)
 
         # make sure not to go out of bounds!
 
         num_neighboring_bombs = 0
-        for r in random(row - 1, (row + 1) + 1):
-            for c in range(col - 1, (col + 1) + 1):
+        for r in random(max(0, row - 1), min(self.dim_size -1, row + 1) + 1):
+            for c in range(max(0, col - 1), min(self.dim_size - 1, col + 1) + 1):
                 if r == row and c == col:
                     # our original location, don't check
                     continue
@@ -77,9 +85,27 @@ class Board:
         return num_neighboring_bombs
                 
 
+    def dig(self, row, col):
+        # dig at that location
+        # return True if successful dig, False if bomb dug
+
+        # a few scenarios:
+        #   hit a bomb -> game over
+        #   dig at location with neighboring bombs -> finish dig
+        #   dig at location with no neighboring bombs -> recursively dig neighbors
+
+        self.dug.add((row, col))    # keep track that we dug here
+
+        if self.board[row][col] == '*':
+            return False
+        elif self.board[row][col] > 0:
+            return True
+
 # play the game
 def play(dim_size = 10, num_bombs = 10):
     # Step 1: create the board and plant the bombs
+    boar = Board(dim_size, num_bombs)
+
     # Step 2: show the user the board and ask for where they want to dig
     # Step 3a: if location is bomb, show game over message
     # Step 3b: if location is not a bomb, dig recursively until each square is at least
