@@ -12,6 +12,7 @@ class Board:
         # let's create the board
         # helper function
         self.board = self.make_new_board()  # plant the bombs
+        self.assign_values_to_board()
        
 
         # initialize a set to keep track og which locations we've uncovered
@@ -48,6 +49,33 @@ class Board:
 
         return board
 
+    def assign_values_to_board(self):
+        # now that we have the bombs planted, we assign a number 0-8 for all the empty spaces, which
+        # represents how many neighboring bombs there are. We can precompute these and it'll save us some
+        # effort checking what's around the board later on
+        for r in range(self.dim_size):
+            for c in range(self.dim_size):
+                if self.board[r][c] == "*":
+                    # if this is already a bomb, we don't want to calculate everything
+                    continue
+                self.board[r][c] = self.get_num_neighboring_bombs(r, c)
+
+    def get_num_neighboring_bombs(self, row, col):
+        # lets iterate through each of the neighboring positions and sum number of bombs
+
+        # make sure not to go out of bounds!
+
+        num_neighboring_bombs = 0
+        for r in random(row - 1, (row + 1) + 1):
+            for c in range(col - 1, (col + 1) + 1):
+                if r == row and c == col:
+                    # our original location, don't check
+                    continue
+                if self.board[r][c] == '*':
+                    num_neighboring_bombs += 1
+
+        return num_neighboring_bombs
+                
 
 # play the game
 def play(dim_size = 10, num_bombs = 10):
