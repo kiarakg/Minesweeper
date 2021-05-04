@@ -1,4 +1,5 @@
 import random
+import re
 
 # lets create a board object to represent the minesweeper game
 # this is so that we can just say "create a new board object" or
@@ -172,4 +173,33 @@ def play(dim_size = 10, num_bombs = 10):
     # Step 3b: if location is not a bomb, dig recursively until each square is at least
     #           is nect to a bomb
     # Step 4: repeat steps 2 and 3a/b until there are no more places to dig --> Victory!
-    pass
+    
+    safe = True
+
+    while len(board.dug) < board.dim_size ** 2 - num_bombs:
+        print(board)
+        # 0,0 or 0, 0 or 0,   0
+        user_input = re.split(',(\\s)*', input("Where would you like to dig? Input as row, col: "))
+        row, col = int(user_input[0]), int(user_input[-1])
+        if row < 0 or row >= board.dim_size or col < 0 or col >= dim_size:
+            print("Invalid location. Try again.")
+            continue
+
+        # if it's valid, we dig
+        safe = board.dig(row, col)
+        if not safe:
+            # dug a bomb! oh no!
+            break   # game over RIP
+
+    # 2 ways to end loop
+    if safe:
+        print("Congrats! You won!")
+    else:
+        print("Sorry, GAME OVER! :")
+        # let's reveal the whole board!
+        board.dug = [(r, c) for r in range(board.dim_size) for c in range(board.dim_size)]
+        print(board)
+
+if __name__ == '__main__':  # good practice
+    play()
+
