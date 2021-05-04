@@ -84,7 +84,6 @@ class Board:
 
         return num_neighboring_bombs
                 
-
     def dig(self, row, col):
         # dig at that location
         # return True if successful dig, False if bomb dug
@@ -126,6 +125,22 @@ class Board:
                     visible_board[row][col] = ' '
 
         # put this together in a string
+                string_rep = ''
+        
+        #get max column widths for printing
+        widths = []
+        for idx in range(self.dim_size):
+            columns = map(lambda x: x[idx], visible_board)
+            widths.append(
+                len(
+                    max(columns, key = len)
+                )
+            )
+        
+        # print the csv strings
+        indices = [i for i in range(self.dim_size)]
+        indices_row = '   '
+        cells = []
 
 # play the game
 def play(dim_size = 10, num_bombs = 10):
