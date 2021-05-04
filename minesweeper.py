@@ -100,6 +100,32 @@ class Board:
             return False
         elif self.board[row][col] > 0:
             return True
+        
+        # self.board[row][col] == 0
+        for r in range(max(0, row - 1), min(slef.dim_size, row + 1) + 1):
+            for c in range(max(0, col - 1), min(self.dim_size - 1, col + 1) + 1):
+                if (r, c) in self.dug:
+                    continue    # dont't dig where you've already dug
+                self.dig(r, c)
+
+        # if our initial dig didn't hit a bomb, we *shouldn't* hit a bomb here
+        return True
+
+    def __str__(self):
+        # this is a magic function where if yuo call print on this object
+        # it'll print out what this function return!
+        # retrun a string that shows the board to the player
+
+        # first let's create a new array that represents what the user would see
+        visible_board = [[None for _ in range(Self.dim_size)] for _ in range(self.dim_size)]
+        for row in range(self.dim_size):
+            for col in range(self.dim_size):
+                if (row, col) in self.dug:
+                    visible_board[row][col] = str(self.board[row][col])
+                else:
+                    visible_board[row][col] = ' '
+
+        # put this together in a string
 
 # play the game
 def play(dim_size = 10, num_bombs = 10):
