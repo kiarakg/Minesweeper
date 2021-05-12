@@ -56,7 +56,7 @@ class Board:
         # effort checking what's around the board later on
         for r in range(self.dim_size):
             for c in range(self.dim_size):
-                if self.board[r][c] == "*":
+                if self.board[r][c] == '*':
                     # if this is already a bomb, we don't want to calculate everything
                     continue
                 self.board[r][c] = self.get_num_neighboring_bombs(r, c)
@@ -75,10 +75,10 @@ class Board:
         # make sure not to go out of bounds!
 
         num_neighboring_bombs = 0
-        for r in random(max(0, row - 1), min(self.dim_size -1, row + 1) + 1):
+        for r in range(max(0, row - 1), min(self.dim_size -1, row + 1) + 1):
             for c in range(max(0, col - 1), min(self.dim_size - 1, col + 1) + 1):
                 if r == row and c == col:
-                    # our original location, don't check
+                    # our original location, don't have to check
                     continue
                 if self.board[r][c] == '*':
                     num_neighboring_bombs += 1
@@ -102,7 +102,7 @@ class Board:
             return True
         
         # self.board[row][col] == 0
-        for r in range(max(0, row - 1), min(slef.dim_size, row + 1) + 1):
+        for r in range(max(0, row - 1), min(self.dim_size - 1, row + 1) + 1):
             for c in range(max(0, col - 1), min(self.dim_size - 1, col + 1) + 1):
                 if (r, c) in self.dug:
                     continue    # dont't dig where you've already dug
@@ -112,12 +112,12 @@ class Board:
         return True
 
     def __str__(self):
-        # this is a magic function where if yuo call print on this object
-        # it'll print out what this function return!
-        # retrun a string that shows the board to the player
+        # this is a magic function where if you call print on this object
+        # it'll print out what this function returns!
+        # return a string that shows the board to the player
 
         # first let's create a new array that represents what the user would see
-        visible_board = [[None for _ in range(Self.dim_size)] for _ in range(self.dim_size)]
+        visible_board = [[None for _ in range(self.dim_size)] for _ in range(self.dim_size)]
         for row in range(self.dim_size):
             for col in range(self.dim_size):
                 if (row, col) in self.dug:
@@ -128,7 +128,7 @@ class Board:
         # put this together in a string
         string_rep = ''
         
-        #get max column widths for printing
+        # get max column widths for printing
         widths = []
         for idx in range(self.dim_size):
             columns = map(lambda x: x[idx], visible_board)
@@ -166,12 +166,12 @@ class Board:
 # play the game
 def play(dim_size = 10, num_bombs = 10):
     # Step 1: create the board and plant the bombs
-    boar = Board(dim_size, num_bombs)
+    board = Board(dim_size, num_bombs)
 
     # Step 2: show the user the board and ask for where they want to dig
     # Step 3a: if location is bomb, show game over message
     # Step 3b: if location is not a bomb, dig recursively until each square is at least
-    #           is nect to a bomb
+    #           is next to a bomb
     # Step 4: repeat steps 2 and 3a/b until there are no more places to dig --> Victory!
     
     safe = True
@@ -193,9 +193,9 @@ def play(dim_size = 10, num_bombs = 10):
 
     # 2 ways to end loop
     if safe:
-        print("Congrats! You won!")
+        print("Congrats! YOU WON!")
     else:
-        print("Sorry, GAME OVER! :")
+        print("Sorry, GAME OVER!")
         # let's reveal the whole board!
         board.dug = [(r, c) for r in range(board.dim_size) for c in range(board.dim_size)]
         print(board)
